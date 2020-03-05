@@ -37,10 +37,15 @@ public class Graph {
                         int x2 = (int) (vertex2.x - (Math.cos(angle) * size / 2));
                         int y2 = (int) (vertex2.y - (Math.sin(angle) * size / 2));
                         if (matrix[i][j] == matrix[j][i]) {
-                            Arrow arrow = new Arrow(x1, y1, x2, y2, directed, d);
+                            double angle2 = angle + Math.PI/10;
+                            x1 = (int) (vertex1.x + (Math.cos(angle2) * size / 2));
+                            y1 = (int) (vertex1.y + (Math.sin(angle2) * size / 2));
+                            x2 = (int) (vertex2.x - (Math.cos(angle) * size / 2));
+                            y2 = (int) (vertex2.y - (Math.sin(angle) * size / 2));
+                            CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, directed, d);
                             frame.add(arrow);
                         } else {
-                            if ((x1 == x2 || y1 == y2) && i != j + 1 && j != i + 1) {
+                            if (intersect(x1, y1, x2, y2)) {
                                 CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, directed, d);
                                 frame.add(arrow);
                             } else {
@@ -69,7 +74,7 @@ public class Graph {
                         int y1 = (int) (vertex1.y + (Math.sin(angle) * size / 2));
                         int x2 = (int) (vertex2.x - (Math.cos(angle) * size / 2));
                         int y2 = (int) (vertex2.y - (Math.sin(angle) * size / 2));
-                        if ((x1 == x2 || y1 == y2) && l != k + 1) {
+                        if (intersect(x1, y1, x2, y2)) {
                             CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, directed, d);
                             frame.add(arrow);
                         } else {
@@ -122,12 +127,21 @@ public class Graph {
             frame.add(vertexBottom);
             if (r % 2 != 0) {
                 bx = hbi * (h + 1) + 100;
-                ;
                 bn = n - v - h;
                 Circle vertexAdditional = new Circle(bx, by, size, d, bn);
                 vertices.put(bn, vertexAdditional);
                 frame.add(vertexAdditional);
             }
         }
+    }
+    public boolean intersect(int x1, int y1, int x2, int y2) {
+        for (Circle vertex : vertices.values()) {
+            int xc = vertex.x;
+            int yc = vertex.y;
+            if (xc <= Math.max(x1, x2) && xc >= Math.min(x1, x2) &&
+                    yc <= Math.max(y1, y2) && yc >= Math.min(y1, y2))
+                return true;
+        }
+        return false;
     }
 }

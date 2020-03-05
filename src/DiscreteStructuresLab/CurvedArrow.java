@@ -32,11 +32,11 @@ public class CurvedArrow extends JComponent {
             arrowHead.addPoint(-5, -10);
             arrowHead.addPoint(5, -10);
             tx.setToIdentity();
-            int xc = (x1 + x2) / 2;
-            int yc = (y1 + y2) / 2;
             double angle = Math.atan2(y2 - y1, x2 - x1);
+            double xc = (x1 + x2) / 2 + (Math.sin(-angle) * 80);
+            double yc = (y1 + y2) / 2 + (Math.cos(angle) * 80);
             double anglec = Math.atan2(y2 - yc, x2 - xc);
-            QuadCurve2D line = new QuadCurve2D.Double(x1, y1, xc + (Math.sin(-angle) * 80), yc + (Math.cos(angle) * 90), x2 - (Math.cos(angle) * 5), y2 - (Math.sin(angle) * 5));
+            QuadCurve2D line = new QuadCurve2D.Double(x1, y1, xc, yc, x2 - (Math.cos(angle) * 5), y2 - (Math.sin(angle) * 5));
             g2d.draw(line);
             tx.translate(x2 + 0.5, y2);
             tx.rotate((anglec - Math.PI / 2d));
