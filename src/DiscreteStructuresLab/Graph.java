@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class Graph {
     private int size = 70;
     private boolean directed;
-    private HashMap<Number, Circle> vertices = new HashMap<>();
+    private HashMap<Integer, Circle> vertices = new HashMap<>();
     private int[][] matrix;
 
     public Graph(int[][] matrix, boolean directed) {
@@ -18,17 +18,21 @@ public class Graph {
     public void drawEdges(JFrame frame) {
         Dimension d = frame.getPreferredSize();
         int n = matrix.length;
-        if (directed) {
-            for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
+            if (directed) {
                 for (int j = 0; j < n; j++) {
                     if (i == j && matrix[i][j] == 1) {
                         Circle vertex = vertices.get(i + 1);
+                        vertex.inDegree++;
+                        vertex.outDegree++;
                         SelfArrow arrow = new SelfArrow(vertex.x, vertex.y, size, directed, d);
                         frame.add(arrow);
                     }
                     if (i != j && matrix[i][j] == 1) {
                         Circle vertex2 = vertices.get(i + 1);
                         Circle vertex1 = vertices.get(j + 1);
+                        vertex2.inDegree++;
+                        vertex1.outDegree++;
                         int dx = vertex2.x - vertex1.x;
                         int dy = vertex2.y - vertex1.y;
                         double angle = Math.atan2(dy, dx);
@@ -37,11 +41,9 @@ public class Graph {
                         int x2 = (int) (vertex2.x - (Math.cos(angle) * size / 2));
                         int y2 = (int) (vertex2.y - (Math.sin(angle) * size / 2));
                         if (matrix[i][j] == matrix[j][i]) {
-                            double angle2 = angle + Math.PI/10;
+                            double angle2 = angle + Math.PI / 10;
                             x1 = (int) (vertex1.x + (Math.cos(angle2) * size / 2));
                             y1 = (int) (vertex1.y + (Math.sin(angle2) * size / 2));
-                            x2 = (int) (vertex2.x - (Math.cos(angle) * size / 2));
-                            y2 = (int) (vertex2.y - (Math.sin(angle) * size / 2));
                             CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, directed, d);
                             frame.add(arrow);
                         } else {
@@ -55,18 +57,20 @@ public class Graph {
                         }
                     }
                 }
-            }
-        } else {
-            for (int k = 0; k < n; k++) {
-                for (int l = k; l < n; l++) {
-                    if (k == l && matrix[k][l] == 1) {
-                        Circle vertex = vertices.get(k + 1);
+            } else {
+                for (int l = i; l < n; l++) {
+                    if (i == l && matrix[i][l] == 1) {
+                        Circle vertex = vertices.get(i + 1);
+                        vertex.inDegree++;
+                        vertex.outDegree++;
                         SelfArrow arrow = new SelfArrow(vertex.x, vertex.y, size, directed, d);
                         frame.add(arrow);
                     }
-                    if (k != l && matrix[k][l] == 1) {
-                        Circle vertex2 = vertices.get(k + 1);
+                    if (i != l && matrix[i][l] == 1) {
+                        Circle vertex2 = vertices.get(i + 1);
                         Circle vertex1 = vertices.get(l + 1);
+                        vertex2.inDegree++;
+                        vertex1.outDegree++;
                         int dx = vertex2.x - vertex1.x;
                         int dy = vertex2.y - vertex1.y;
                         double angle = Math.atan2(dy, dx);
@@ -134,7 +138,7 @@ public class Graph {
             }
         }
     }
-    public boolean intersect(int x1, int y1, int x2, int y2) {
+    public boolean intersect(double x1, double y1, double x2, double y2) {
         for (Circle vertex : vertices.values()) {
             int xc = vertex.x;
             int yc = vertex.y;
@@ -143,5 +147,8 @@ public class Graph {
                 return true;
         }
         return false;
+    }
+    public HashMap<Integer, Circle> getVertices() {
+        return vertices;
     }
 }
