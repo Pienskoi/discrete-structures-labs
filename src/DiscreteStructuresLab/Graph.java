@@ -29,8 +29,8 @@ public class Graph {
                         frame.add(arrow);
                     }
                     if (i != j && matrix[i][j] == 1) {
-                        Circle vertex2 = vertices.get(i + 1);
-                        Circle vertex1 = vertices.get(j + 1);
+                        Circle vertex1 = vertices.get(i + 1);
+                        Circle vertex2 = vertices.get(j + 1);
                         vertex2.inDegree++;
                         vertex1.outDegree++;
                         int dx = vertex2.x - vertex1.x;
@@ -67,8 +67,8 @@ public class Graph {
                         frame.add(arrow);
                     }
                     if (i != l && matrix[i][l] == 1) {
-                        Circle vertex2 = vertices.get(i + 1);
-                        Circle vertex1 = vertices.get(l + 1);
+                        Circle vertex1 = vertices.get(i + 1);
+                        Circle vertex2 = vertices.get(l + 1);
                         vertex2.inDegree++;
                         vertex1.outDegree++;
                         int dx = vertex2.x - vertex1.x;
