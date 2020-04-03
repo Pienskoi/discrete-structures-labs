@@ -29,6 +29,10 @@ public class Window extends JFrame {
         int[][] matrix = Matrix.generateMatrix(this.n1, this.n2, this.n3, this.n4, !this.directed);
         this
                 .drawDegreesButton(matrix, this.directed)
+                .drawPathsButton(matrix)
+                .drawReachabilityButton(matrix)
+                .drawConnectedButton(matrix)
+                .drawCondensedButton(matrix)
                 .drawMatrix(matrix)
                 .drawGraph(matrix, this.directed);
     }
@@ -55,7 +59,7 @@ public class Window extends JFrame {
         label.setFont(this.FONT);
         this.add(label);
         JButton b = new JButton("Змінити");
-        b.setBounds(1300, 65, 100, 30);
+        b.setBounds(1300, 65, 150, 30);
         b.setFont(this.FONT);
         b.setBackground(Color.WHITE);
         b.setFocusPainted(false);
@@ -73,11 +77,71 @@ public class Window extends JFrame {
         label.setFont(this.FONT);
         this.add(label);
         JButton b = new JButton("Степені");
-        b.setBounds(1300, 95, 100, 30);
+        b.setBounds(1300, 95, 150, 30);
         b.setFont(this.FONT);
         b.setBackground(Color.WHITE);
         b.setFocusPainted(false);
         b.setActionCommand("Show Degrees Window");
+        b.addActionListener(new ButtonListener(matrix, directed));
+        this.add(b);
+        return this;
+    }
+    public Window drawPathsButton(int[][] matrix) {
+        JLabel label = new JLabel("Шляхи довжиною 2 і 3");
+        label.setBounds(1100, 125, d.width, 30);
+        label.setFont(this.FONT);
+        this.add(label);
+        JButton b = new JButton("Показати");
+        b.setBounds(1300, 125, 150, 30);
+        b.setFont(this.FONT);
+        b.setBackground(Color.WHITE);
+        b.setFocusPainted(false);
+        b.setActionCommand("Show Paths Window");
+        b.addActionListener(new ButtonListener(matrix, directed));
+        this.add(b);
+        return this;
+    }
+    public Window drawReachabilityButton(int[][] matrix) {
+        JLabel label = new JLabel("Матриця досяжності");
+        label.setBounds(1100, 155, d.width, 30);
+        label.setFont(this.FONT);
+        this.add(label);
+        JButton b = new JButton("Показати");
+        b.setBounds(1300, 155, 150, 30);
+        b.setFont(this.FONT);
+        b.setBackground(Color.WHITE);
+        b.setFocusPainted(false);
+        b.setActionCommand("Show Reachability Window");
+        b.addActionListener(new ButtonListener(matrix, directed));
+        this.add(b);
+        return this;
+    }
+    public Window drawConnectedButton(int[][] matrix) {
+        JLabel label = new JLabel("Матриця зв'язності");
+        label.setBounds(1100, 185, d.width, 30);
+        label.setFont(this.FONT);
+        this.add(label);
+        JButton b = new JButton("Показати");
+        b.setBounds(1300, 185, 150, 30);
+        b.setFont(this.FONT);
+        b.setBackground(Color.WHITE);
+        b.setFocusPainted(false);
+        b.setActionCommand("Show Connected Window");
+        b.addActionListener(new ButtonListener(matrix, directed));
+        this.add(b);
+        return this;
+    }
+    public Window drawCondensedButton(int[][] matrix) {
+        JLabel label = new JLabel("Граф конденсації");
+        label.setBounds(1100, 215, d.width, 30);
+        label.setFont(this.FONT);
+        this.add(label);
+        JButton b = new JButton("Показати");
+        b.setBounds(1300, 215, 150, 30);
+        b.setFont(this.FONT);
+        b.setBackground(Color.WHITE);
+        b.setFocusPainted(false);
+        b.setActionCommand("Show Condensed Window");
         b.addActionListener(new ButtonListener(matrix, directed));
         this.add(b);
         return this;
@@ -90,7 +154,7 @@ public class Window extends JFrame {
             }
             mat = mat.trim();
             JLabel matrixLabel = new JLabel(mat);
-            matrixLabel.setBounds(1100, 155 + 20 * i, d.width, 20);
+            matrixLabel.setBounds(1100, 275 + 20 * i, d.width, 20);
             matrixLabel.setFont(this.FONT);
             this.add(matrixLabel);
         }
