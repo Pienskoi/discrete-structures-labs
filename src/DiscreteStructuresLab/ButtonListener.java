@@ -19,23 +19,23 @@ public class ButtonListener implements ActionListener {
             this.window.redraw();
         }
         if ("Show Degrees Window".equals(e.getActionCommand())) {
-            DegreesWindow window = new DegreesWindow(matrix, directed);
+            DegreesWindow window = new DegreesWindow(this.matrix, this.directed);
             window.setVisible(true);
         }
         if ("Show Paths Window".equals(e.getActionCommand())) {
-            PathsWindow window = new PathsWindow(matrix);
+            PathsWindow window = new PathsWindow(this.matrix);
             window.setVisible(true);
         }
         if ("Show Reachability Window".equals(e.getActionCommand())) {
-            ReachabilityWindow window = new ReachabilityWindow(matrix);
+            ReachabilityWindow window = new ReachabilityWindow(this.matrix);
             window.setVisible(true);
         }
         if ("Show Connected Window".equals(e.getActionCommand())) {
-            ConnectedWindow window = new ConnectedWindow(matrix);
+            ConnectedWindow window = new ConnectedWindow(this.matrix);
             window.setVisible(true);
         }
         if ("Show Condensed Window".equals(e.getActionCommand())) {
-            CondensedWindow window = new CondensedWindow(matrix);
+            CondensedWindow window = new CondensedWindow(this.matrix);
             window.setVisible(true);
         }
     }

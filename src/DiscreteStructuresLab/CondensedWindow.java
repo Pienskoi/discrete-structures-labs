@@ -23,8 +23,11 @@ public class CondensedWindow extends JFrame {
 
     public void init() {
         int n = matrix.length;
-        int[][] reach = matrix;
+        int[][] reach = new int[n][n];
         for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                reach[i][j] = matrix[i][j];
+            }
             reach[i][i] = 1;
         }
         for (int k = 0; k < n; k++) {
@@ -66,16 +69,18 @@ public class CondensedWindow extends JFrame {
         }
         int c = components.size();
         int[][] condensed = new int[c][c];
-        for (int[] comp : components) {
-            for (int i = 0; i < n; i++) {
-                if (comp[i] == 1) {
-                    for (int j = 0; j < n; j++) {
-                        for (int k = i + 1; k < c; k++) {
-                            if (matrix[i][j] == 1 && components.get(k)[j] == 1) {
-                                condensed[i][k] = 1;
+        for (int i = 0; i < c; i++) {
+            int[] comp1 = components.get(i);
+            for (int j = 0; j < n; j++) {
+                if (comp1[j] == 1) {
+                    for (int k = 0; k < n; k++) {
+                        for (int l = i + 1; l < c; l++) {
+                            int[] comp2 = components.get(l);
+                            if (matrix[j][k] == 1 && comp2[k] == 1) {
+                                condensed[i][l] = 1;
                             }
-                            if (matrix[j][i] == 1 && components.get(k)[j] == 1) {
-                                condensed[k][i] = 1;
+                            if (matrix[k][j] == 1 && comp2[k] == 1) {
+                                condensed[l][i] = 1;
                             }
                         }
                     }
