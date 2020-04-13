@@ -46,15 +46,16 @@ public class Graph {
                         int y1 = (int) (vertex1.y + (Math.sin(angle) * size / 2));
                         int x2 = (int) (vertex2.x - (Math.cos(angle) * size / 2));
                         int y2 = (int) (vertex2.y - (Math.sin(angle) * size / 2));
+                        int k = intersect(x1, y1, x2, y2);
                         if (matrix[i][j] == matrix[j][i]) {
                             double angle2 = angle + Math.PI / 10;
                             x1 = (int) (vertex1.x + (Math.cos(angle2) * size / 2));
                             y1 = (int) (vertex1.y + (Math.sin(angle2) * size / 2));
-                            CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, directed, d);
+                            CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, k, directed, d);
                             edges.add(arrow);
                         } else {
-                            if (intersect(x1, y1, x2, y2)) {
-                                CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, directed, d);
+                            if (k > 0) {
+                                CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, k, directed, d);
                                 edges.add(arrow);
                             } else {
                                 Arrow arrow = new Arrow(x1, y1, x2, y2, directed, d);
@@ -80,8 +81,9 @@ public class Graph {
                         int y1 = (int) (vertex1.y + (Math.sin(angle) * size / 2));
                         int x2 = (int) (vertex2.x - (Math.cos(angle) * size / 2));
                         int y2 = (int) (vertex2.y - (Math.sin(angle) * size / 2));
-                        if (intersect(x1, y1, x2, y2)) {
-                            CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, directed, d);
+                        int k = intersect(x1, y1, x2, y2);
+                        if (k > 0) {
+                            CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, k, directed, d);
                             edges.add(arrow);
                         } else {
                             Arrow arrow = new Arrow(x1, y1, x2, y2, directed, d);
@@ -92,15 +94,16 @@ public class Graph {
             }
         }
     }
-    public boolean intersect(double x1, double y1, double x2, double y2) {
+    public int intersect(double x1, double y1, double x2, double y2) {
+        int counter = 0;
         for (Circle vertex : vertices.values()) {
             int xc = vertex.x;
             int yc = vertex.y;
             if (xc <= Math.max(x1, x2) && xc >= Math.min(x1, x2) &&
                     yc <= Math.max(y1, y2) && yc >= Math.min(y1, y2))
-                return true;
+                counter++;
         }
-        return false;
+        return counter;
     }
     public void getVertices() {
         int n = matrix.length;

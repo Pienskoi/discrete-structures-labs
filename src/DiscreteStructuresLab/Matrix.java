@@ -10,7 +10,7 @@ public class Matrix {
         Random random = new Random(n1 * 1000 + n2 * 100 + n3 * 10 + n4);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                double element = (random.nextDouble() + random.nextDouble()) * (1 - n3 * 0.005 - n4 * 0.005 - 0.27);
+                double element = (random.nextDouble() + random.nextDouble()) * (1 - n3 * 0.01 - n4 * 0.005 - 0.15);
                 matrix[i][j] = (int) Math.floor(element);
             }
         }
