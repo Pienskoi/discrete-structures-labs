@@ -7,12 +7,14 @@ public class ButtonListener implements ActionListener {
     private int[][] matrix;
     private boolean directed;
     private Window window;
+    private PathsWindow pathsWindow;
 
     public ButtonListener(int[][] matrix, boolean directed) {
         this.directed = directed;
         this.matrix = matrix;
     }
     public ButtonListener(Window window) { this.window = window; }
+    public ButtonListener(PathsWindow window) { this.pathsWindow = window; }
     public void actionPerformed(ActionEvent e) {
         if ("Change Orientation".equals(e.getActionCommand())) {
             this.window.changeOrientation();
@@ -37,6 +39,10 @@ public class ButtonListener implements ActionListener {
         if ("Show Condensed Window".equals(e.getActionCommand())) {
             CondensedWindow window = new CondensedWindow(this.matrix);
             window.setVisible(true);
+        }
+        if ("Show Paths".equals(e.getActionCommand())) {
+            this.pathsWindow.changePathsLength();
+            this.pathsWindow.redraw();
         }
     }
 }

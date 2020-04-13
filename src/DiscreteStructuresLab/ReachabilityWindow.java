@@ -24,9 +24,7 @@ public class ReachabilityWindow extends JFrame {
         int n = matrix.length;
         int[][] reach = new int[n][n];
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                reach[i][j] = matrix[i][j];
-            }
+            System.arraycopy(matrix[i], 0, reach[i], 0, n);
             reach[i][i] = 1;
         }
         for (int k = 0; k < n; k++) {

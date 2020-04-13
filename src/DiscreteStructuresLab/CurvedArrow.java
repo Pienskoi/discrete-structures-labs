@@ -33,8 +33,8 @@ public class CurvedArrow extends JComponent {
             arrowHead.addPoint(5, -10);
             tx.setToIdentity();
             double angle = Math.atan2(y2 - y1, x2 - x1);
-            double xc = (x1 + x2) / 2 + (Math.sin(-angle) * 80);
-            double yc = (y1 + y2) / 2 + (Math.cos(angle) * 80);
+            double xc = (x1 + x2) / 2.0 + (Math.sin(-angle) * 30);
+            double yc = (y1 + y2) / 2.0 + (Math.cos(angle) * 30);
             double anglec = Math.atan2(y2 - yc, x2 - xc);
             QuadCurve2D line = new QuadCurve2D.Double(x1, y1, xc, yc, x2 - (Math.cos(angle) * 5), y2 - (Math.sin(angle) * 5));
             g2d.draw(line);

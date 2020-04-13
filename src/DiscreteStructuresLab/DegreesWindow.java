@@ -2,12 +2,15 @@ package DiscreteStructuresLab;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashSet;
 
 public class DegreesWindow extends JFrame {
     private int[][] matrix;
     private final Font FONT = new Font("FreeSans", Font.BOLD, 16);
     private Dimension d;
     private boolean directed;
+    private HashSet<Integer> inDegrees = new HashSet<>();
+    private HashSet<Integer> outDegrees = new HashSet<>();
 
     DegreesWindow(int[][] matrix, boolean directed) {
         super("Степені вершин");
@@ -46,12 +49,15 @@ public class DegreesWindow extends JFrame {
             }
             String deg = "";
             if (directed) {
+                inDegrees.add(inDegree);
+                outDegrees.add(outDegree);
                 sumDeg = outDegree + inDegree;
                 String degPlus = "δ" + "\u207A" + "(v" + index + ") = " + outDegree;
                 String degMinus = "δ" + "\u207B" + "(v" + index + ") = " + inDegree;
                 deg = degPlus + "   " + degMinus;
             } else {
                 degree += outDegree;
+                inDegrees.add(degree);
                 sumDeg = degree;
                 deg = "δ(v" + index + ") = " + degree;
             }
@@ -60,20 +66,28 @@ public class DegreesWindow extends JFrame {
             degLabel.setFont(this.FONT);
             this.add(degLabel);
             if (sumDeg == 1) {
-                pendant = "Висячі вершини: " + "δ" + index + " ";
+                if (pendant.equals("Висячих вершин нема")) pendant = "Висячі вершини: " + "δ" + index + " ";
+                else pendant += "δ" + index + " ";
             }
             if (sumDeg == 0) {
-                isolated = "Ізольовані вершини: " + "δ" + index + " ";
+                if (isolated.equals("Ізольованих вершин нема")) isolated = "Ізольовані вершини: " + "δ" + index + " ";
+                else isolated += "δ" + index + " ";
             }
         }
         JLabel pendantLabel = new JLabel(pendant);
-        pendantLabel.setBounds(250, 50, d.width, 20);
+        pendantLabel.setBounds(250, 70, d.width, 20);
         pendantLabel.setFont(this.FONT);
         this.add(pendantLabel);
         JLabel isolatedLabel = new JLabel(isolated);
-        isolatedLabel.setBounds(250, 70, d.width, 20);
+        isolatedLabel.setBounds(250, 90, d.width, 20);
         isolatedLabel.setFont(this.FONT);
         this.add(isolatedLabel);
+        String text = "Граф неоднорідний";
+        if (inDegrees.size() <= 1 && outDegrees.size() <= 1) text = "Граф однорідний";
+        JLabel regularLabel = new JLabel(text);
+        regularLabel.setBounds(250, 50, d.width, 20);
+        regularLabel.setFont(this.FONT);
+        this.add(regularLabel);
         for (int i = 0; i < matrix.length; i++) {
             String mat = "";
             for (int j = 0; j < matrix[i].length; j++) {

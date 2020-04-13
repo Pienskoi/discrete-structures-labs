@@ -26,23 +26,19 @@ public class Graph {
             frame.add(edge);
         }
     }
-    public HashSet<JComponent> getEdges() {
+    public void getEdges() {
         int n = matrix.length;
         for (int i = 0; i < n; i++) {
             if (directed) {
                 for (int j = 0; j < n; j++) {
                     if (i == j && matrix[i][j] == 1) {
                         Circle vertex = vertices.get(i + 1);
-                        vertex.inDegree++;
-                        vertex.outDegree++;
                         SelfArrow arrow = new SelfArrow(vertex.x, vertex.y, size, directed, d);
                         edges.add(arrow);
                     }
                     if (i != j && matrix[i][j] == 1) {
                         Circle vertex1 = vertices.get(i + 1);
                         Circle vertex2 = vertices.get(j + 1);
-                        vertex2.inDegree++;
-                        vertex1.outDegree++;
                         int dx = vertex2.x - vertex1.x;
                         int dy = vertex2.y - vertex1.y;
                         double angle = Math.atan2(dy, dx);
@@ -71,16 +67,12 @@ public class Graph {
                 for (int l = i; l < n; l++) {
                     if (i == l && matrix[i][l] == 1) {
                         Circle vertex = vertices.get(i + 1);
-                        vertex.inDegree++;
-                        vertex.outDegree++;
                         SelfArrow arrow = new SelfArrow(vertex.x, vertex.y, size, directed, d);
                         edges.add(arrow);
                     }
                     if (i != l && matrix[i][l] == 1) {
                         Circle vertex1 = vertices.get(i + 1);
                         Circle vertex2 = vertices.get(l + 1);
-                        vertex2.inDegree++;
-                        vertex1.outDegree++;
                         int dx = vertex2.x - vertex1.x;
                         int dy = vertex2.y - vertex1.y;
                         double angle = Math.atan2(dy, dx);
@@ -99,7 +91,6 @@ public class Graph {
                 }
             }
         }
-        return edges;
     }
     public boolean intersect(double x1, double y1, double x2, double y2) {
         for (Circle vertex : vertices.values()) {
@@ -111,22 +102,26 @@ public class Graph {
         }
         return false;
     }
-    public HashMap<Integer, Circle> getVertices() {
+    public void getVertices() {
         int n = matrix.length;
         int v = n / 4 + 1;
         int h = n / 2 - v;
         int r = n % 4;
-        for (int i = 0; i < v; i++) {
-            int vi = (d.height - 200) / (v - 1);
-            int rx = d.width - 100;
-            int lx = 100;
-            int y = 100 + (vi * i);
-            int rn = h + i + 1;
-            int ln = n - i;
-            Circle vertexRight = new Circle(rx, y, size, d, rn);
-            Circle vertexLeft = new Circle(lx, y, size, d, ln);
-            vertices.put(rn, vertexRight);
-            vertices.put(ln, vertexLeft);
+        if (h > -1) {
+            for (int i = 0; i < v; i++) {
+                double vi;
+                if (v <= 1) vi = d.height - 200;
+                else vi = (d.height - 200) / (v - 1.0);
+                int rx = d.width - 100;
+                int lx = 100;
+                int y = (int) (100 + (vi * i));
+                int rn = h + i + 1;
+                int ln = n - i;
+                Circle vertexRight = new Circle(rx, y, size, d, rn);
+                vertices.put(rn, vertexRight);
+                Circle vertexLeft = new Circle(lx, y, size, d, ln);
+                vertices.put(ln, vertexLeft);
+            }
         }
         for (int j = 0; j < h; j++) {
             int hti = (d.width - 200) / (h + 1);
@@ -144,23 +139,14 @@ public class Graph {
             Circle vertexBottom = new Circle(bx, by, size, d, bn);
             vertices.put(tn, vertexTop);
             vertices.put(bn, vertexBottom);
-            if (r % 2 != 0) {
-                bx = hbi * (h + 1) + 100;
-                bn = n - v - h;
-                Circle vertexAdditional = new Circle(bx, by, size, d, bn);
-                vertices.put(bn, vertexAdditional);
-            }
         }
-        return vertices;
-    }
-    public boolean regular() {
-        HashSet<Integer> inDegrees = new HashSet<>();
-        HashSet<Integer> outDegrees = new HashSet<>();
-        for (Integer i : vertices.keySet()) {
-            Circle vertex = vertices.get(i);
-            inDegrees.add(vertex.inDegree);
-            outDegrees.add(vertex.outDegree);
+        if (r % 2 != 0) {
+            int ax = ((d.width - 200) / (h + 2)) * (h + 1) + 100;
+            int ay = d.height - 100;
+            if (h < 0) ay = 100;
+            int an = n - v - h;
+            Circle vertexAdditional = new Circle(ax, ay, size, d, an);
+            vertices.put(an, vertexAdditional);
         }
-        return (inDegrees.size() <= 1 && outDegrees.size() <= 1);
     }
 }

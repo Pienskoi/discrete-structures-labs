@@ -4,15 +4,27 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PathsWindow  extends JFrame {
-    private int[][] matrix;
+    private int[][] matrix, matrixCopy, paths2, paths3;
     private final Font FONT = new Font("FreeSans", Font.BOLD, 16);
+    private int pathsLength = 2;
     private Dimension d;
+    private JPanel panel = new JPanel();
 
     PathsWindow(int[][] matrix) {
         super("Шляхи");
         this.matrix = matrix;
-        this.d = new Dimension(1920, 300 + 40 * matrix.length);
-        this.setLayout(null);
+        this.paths2 = new int[matrix.length][matrix.length];
+        this.paths3 = new int[matrix.length][matrix.length];
+        this.matrixCopy = new int[matrix.length][matrix.length];
+        for (int i = 0; i < matrix.length; i++) {
+            System.arraycopy(matrix[i], 0, matrixCopy[i], 0, matrix.length);
+            matrixCopy[i][i] = 0;
+        }
+        this.d = new Dimension(1920, 300 + 20 * matrix.length);
+        JScrollPane scrollBar = new JScrollPane(panel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollBar.getVerticalScrollBar().setUnitIncrement(20);
+        this.add(scrollBar);
+        panel.setLayout(null);
         this.setPreferredSize(d);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.pack();
@@ -22,44 +34,53 @@ public class PathsWindow  extends JFrame {
 
     public void init() {
         int n = matrix.length;
-        int[][] matrixCopy = new int[n][n];
-        int[][] paths2 = new int[n][n];
-        int[][] paths3 = new int[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                matrixCopy[i][j] = matrix[i][j];
-            }
-            matrixCopy[i][i] = 0;
-        }
-        for (int i = 0; i < n; i++) {
-            int c1 = 0;
-            int c2 = 0;
-            for (int j = 0; j < n; j++) {
-                if (matrixCopy[i][j] == 1) {
-                    for (int k = 0; k < n; k++) {
-                        if (matrixCopy[j][k] == 1) {
-                            paths2[i][k] = 1;
-                            String p2 = (i + 1) + " -> " + (j + 1) + " -> " + (k + 1);
-                            JLabel matrixLabel = new JLabel(p2);
-                            matrixLabel.setBounds(300 + 130 * i, 50 + 20 * c1, d.width, 20);
-                            matrixLabel.setFont(this.FONT);
-                            this.add(matrixLabel);
-                            c1++;
-                            for (int m = 0; m < n; m++) {
-                                if (matrixCopy[k][m] == 1) {
-                                    paths3[i][m] = 1;
-                                    String p3 = (i + 1) + " -> " + (j + 1) + " -> " + (k + 1) + " -> " + (m + 1);
-                                    JLabel matrixLabel2 = new JLabel(p3);
-                                    matrixLabel2.setBounds(300 + 130 * i, 90 + 20 * n + 20 * c2, d.width, 20);
-                                    matrixLabel2.setFont(this.FONT);
-                                    this.add(matrixLabel2);
-                                    c2++;
-                                }
+                for (int k = 0; k < n; k++) {
+                    if (matrixCopy[i][j] == 1 && matrixCopy[j][k] == 1) {
+                        paths2[i][k] = 1;
+                        for (int m = 0; m < n; m++) {
+                            if (matrixCopy[k][m] == 1) {
+                                paths3[i][m] = 1;
                             }
                         }
                     }
                 }
             }
+        }
+        JLabel label = new JLabel("Шляхи довжиною:");
+        label.setBounds(50, 50, d.width, 30);
+        label.setFont(this.FONT);
+        panel.add(label);
+        JButton b = new JButton(pathsLength + "");
+        b.setBounds(200, 50, 50, 30);
+        b.setFont(this.FONT);
+        b.setBackground(Color.WHITE);
+        b.setFocusPainted(false);
+        b.setActionCommand("Show Paths");
+        b.addActionListener(new ButtonListener(this));
+        panel.add(b);
+        if (pathsLength == 2) this.drawPaths2();
+        else this.drawPaths3();
+    }
+    public void drawPaths2() {
+        int n = matrix.length;
+        int cMax = 0;
+        for (int i = 0; i < n; i++) {
+            int c = 0;
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < n; k++) {
+                    if (matrixCopy[i][j] == 1 && matrixCopy[j][k] == 1) {
+                        String p2 = (i + 1) + " -> " + (j + 1) + " -> " + (k + 1);
+                        JLabel paths2Label = new JLabel(p2);
+                        paths2Label.setBounds(300 + 130 * i, 150 + 20 * c, d.width, 20);
+                        paths2Label.setFont(this.FONT);
+                        panel.add(paths2Label);
+                        c++;
+                    }
+                }
+            }
+            if (c > cMax) cMax = c;
         }
         for (int i = 0; i < n; i++) {
             String mat = "";
@@ -68,9 +89,33 @@ public class PathsWindow  extends JFrame {
             }
             mat = mat.trim();
             JLabel matrixLabel = new JLabel(mat);
-            matrixLabel.setBounds(50, 50 + 20 * i, d.width, 20);
+            matrixLabel.setBounds(50, 150 + 20 * i, d.width, 20);
             matrixLabel.setFont(this.FONT);
-            this.add(matrixLabel);
+            panel.add(matrixLabel);
+        }
+        panel.setPreferredSize(new Dimension(1920, 170 + 20 * cMax));
+    }
+    public void drawPaths3() {
+        int n = matrix.length;
+        int cMax = 0;
+        for (int i = 0; i < n; i++) {
+            int c = 0;
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < n; k++) {
+                    for (int m = 0; m < n; m++) {
+                        if (matrixCopy[i][j] == 1 && matrixCopy[j][k] == 1 && matrixCopy[k][m] == 1) {
+                            String p3 = (i + 1) + " -> " + (j + 1) + " -> " + (k + 1) + " -> " + (m + 1);
+                            JLabel paths3Label = new JLabel(p3);
+                            paths3Label.setBounds(300 + 130 * i, 150 + 20 * c, d.width, 20);
+                            paths3Label.setFont(this.FONT);
+                            panel.add(paths3Label);
+                            c++;
+
+                        }
+                    }
+                }
+            }
+            if (c > cMax) cMax = c;
         }
         for (int i = 0; i < n; i++) {
             String mat = "";
@@ -79,9 +124,20 @@ public class PathsWindow  extends JFrame {
             }
             mat = mat.trim();
             JLabel matrixLabel = new JLabel(mat);
-            matrixLabel.setBounds(50, 90 + 20 * n + 20 * i, d.width, 20);
+            matrixLabel.setBounds(50, 150 + 20 * i, d.width, 20);
             matrixLabel.setFont(this.FONT);
-            this.add(matrixLabel);
+            panel.add(matrixLabel);
         }
+        panel.setPreferredSize(new Dimension(1920, 170 + 20 * cMax));
+    }
+    public void redraw() {
+        Component[] components = panel.getComponents();
+        for (Component component : components) component.setVisible(false);
+        panel.removeAll();
+        this.init();
+    }
+    public void changePathsLength() {
+        if (this.pathsLength == 2) this.pathsLength = 3;
+        else this.pathsLength = 2;
     }
 }

@@ -12,7 +12,7 @@ public class ConnectedWindow extends JFrame {
     ConnectedWindow(int[][] matrix) {
         super("Матриця зв'язності і компоненти сильної зв'язності");
         this.matrix = matrix;
-        this.d = new Dimension(250 + 20 * matrix.length, 80 + 20 * matrix.length);
+        this.d = new Dimension(90 + 40 * matrix.length, 80 + 20 * matrix.length);
         this.setLayout(null);
         this.setPreferredSize(d);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -25,9 +25,7 @@ public class ConnectedWindow extends JFrame {
         int n = matrix.length;
         int[][] reach = new int[n][n];
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                reach[i][j] = matrix[i][j];
-            }
+            System.arraycopy(matrix[i], 0, reach[i], 0, n);
             reach[i][i] = 1;
         }
         for (int k = 0; k < n; k++) {
@@ -77,7 +75,7 @@ public class ConnectedWindow extends JFrame {
                 text = text.trim().replace(" ", ", ");
                 String index = String.valueOf(Character.toChars(Integer.parseInt("208" + (c + 1), 16)));
                 JLabel compLabel = new JLabel("K" + index + " = { " + text + " }");
-                compLabel.setBounds(300, 30 + 20 * c, d.width, 20);
+                compLabel.setBounds(60 + 16 * n, 30 + 20 * c, d.width, 20);
                 compLabel.setFont(this.FONT);
                 this.add(compLabel);
                 c++;

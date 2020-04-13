@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class Window extends JFrame {
     private int n1 = 9, n2 = 4, n3 = 2, n4 = 2;
-    private boolean regular, directed = true;
+    private boolean directed = true;
     private Dimension d = new Dimension(1500, 1000);
     private final Font FONT = new Font("Arial", Font.BOLD, 16);
 
@@ -41,7 +41,6 @@ public class Window extends JFrame {
         graph.getVertices();
         graph.getEdges();
         graph.draw(this);
-        this.regular = graph.regular();
     }
     public void changeOrientation() { this.directed = !this.directed; }
     public void redraw() {
@@ -69,14 +68,11 @@ public class Window extends JFrame {
         return this;
     }
     public Window drawDegreesButton(int[][] matrix, boolean directed) {
-        String text = "";
-        if (regular) text = "Граф однорідний";
-        else text = "Граф неоднорідний";
-        JLabel label = new JLabel(text);
+        JLabel label = new JLabel("Степені вершин");
         label.setBounds(1100, 95, d.width, 30);
         label.setFont(this.FONT);
         this.add(label);
-        JButton b = new JButton("Степені");
+        JButton b = new JButton("Показати");
         b.setBounds(1300, 95, 150, 30);
         b.setFont(this.FONT);
         b.setBackground(Color.WHITE);

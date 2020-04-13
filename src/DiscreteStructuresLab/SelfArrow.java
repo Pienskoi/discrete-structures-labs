@@ -17,7 +17,7 @@ public class SelfArrow extends JComponent {
             this.ang2 = 230;
             this.ang3 = -20;
         }
-        else if (y > d.height - 135) {
+        else if (y == d.height - 100) {
             this.x = x;
             this.y = y + (size / 2);
             this.ang1 = 155;

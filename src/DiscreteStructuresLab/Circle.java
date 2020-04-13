@@ -5,9 +5,7 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
 public class Circle extends JComponent {
-    public int x, y,
-            inDegree = 0,
-            outDegree = 0;
+    public int x, y;
     private int n, diam;
 
     public Circle(int x, int y, int diam, Dimension d, int n) {
