@@ -7,6 +7,7 @@ import java.awt.geom.Ellipse2D;
 public class Circle extends JComponent {
     public int x, y;
     private int n, diam;
+    private Color color = Color.BLACK;
 
     public Circle(int x, int y, int diam, Dimension d, int n) {
         this.x = x;
@@ -17,6 +18,8 @@ public class Circle extends JComponent {
         this.setBounds(0, 0, d.width, d.height);
     }
 
+    public void changeColor(Color color) { this.color = color; }
+    public void changeNumber(int n) { this.n = n; }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
@@ -27,6 +30,7 @@ public class Circle extends JComponent {
         int y = this.y - (diam / 2);
         Shape circle = new Ellipse2D.Double(x, y, diam, diam);
         g2d.setStroke(new BasicStroke(3));
+        g2d.setColor(this.color);
         g2d.draw(circle);
         g2d.setFont(new Font("Arial", Font.BOLD, 30));
         FontMetrics fm = g2d.getFontMetrics();

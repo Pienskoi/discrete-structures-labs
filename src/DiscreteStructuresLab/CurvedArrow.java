@@ -7,6 +7,7 @@ import java.awt.geom.*;
 public class CurvedArrow extends JComponent {
     private int x1, y1, x2, y2, k;
     private boolean directed;
+    private Color color = Color.BLACK;
 
     public CurvedArrow(int x1, int y1, int x2, int y2, int k, boolean directed, Dimension d) {
         this.x1 = x1;
@@ -19,6 +20,7 @@ public class CurvedArrow extends JComponent {
         this.setBounds(0 , 0, d.width, d.height);
     }
 
+    public void changeColor(Color color) { this.color = color; }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
@@ -26,6 +28,7 @@ public class CurvedArrow extends JComponent {
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setStroke(new BasicStroke(3));
+        g2d.setColor(this.color);
         if (directed) {
             AffineTransform tx = new AffineTransform();
             Polygon arrowHead = new Polygon();

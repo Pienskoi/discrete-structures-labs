@@ -1,5 +1,6 @@
 package DiscreteStructuresLab;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,6 +9,7 @@ public class ButtonListener implements ActionListener {
     private boolean directed;
     private Window window;
     private PathsWindow pathsWindow;
+    private DepthFirstSearchWindow DFSWindow;
 
     public ButtonListener(int[][] matrix, boolean directed) {
         this.directed = directed;
@@ -15,6 +17,7 @@ public class ButtonListener implements ActionListener {
     }
     public ButtonListener(Window window) { this.window = window; }
     public ButtonListener(PathsWindow window) { this.pathsWindow = window; }
+    public ButtonListener(DepthFirstSearchWindow window) { this.DFSWindow = window; }
     public void actionPerformed(ActionEvent e) {
         if ("Change Orientation".equals(e.getActionCommand())) {
             this.window.changeOrientation();
@@ -43,6 +46,22 @@ public class ButtonListener implements ActionListener {
         if ("Show Paths".equals(e.getActionCommand())) {
             this.pathsWindow.changePathsLength();
             this.pathsWindow.redraw();
+        }
+        if ("Show DFS Window".equals(e.getActionCommand())) {
+            DepthFirstSearchWindow window = new DepthFirstSearchWindow(this.matrix, this.directed);
+            window.setVisible(true);
+        }
+        if ("Start DFS".equals(e.getActionCommand())) {
+            JComboBox<Integer> vBox = this.DFSWindow.getComboBox();
+            int vertex = vBox.getSelectedIndex();
+            this.DFSWindow.start(vertex + 1);
+        }
+        if ("Next DFS step".equals(e.getActionCommand())) {
+            this.DFSWindow.search();
+        }
+        if ("Show tree or graph".equals(e.getActionCommand())) {
+            this.DFSWindow.changeGraphToTree();
+            this.DFSWindow.finish();
         }
     }
 }

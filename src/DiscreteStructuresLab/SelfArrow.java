@@ -8,6 +8,7 @@ import java.awt.geom.Arc2D;
 public class SelfArrow extends JComponent {
     private int x, y, ang1, ang2, ang3, r = 30;
     private boolean directed;
+    private Color color = Color.BLACK;
 
     public SelfArrow(int x, int y, int size, boolean directed, Dimension d) {
         if (y == 100) {
@@ -42,6 +43,8 @@ public class SelfArrow extends JComponent {
         this.setOpaque(false);
         this.setBounds(0, 0, d.width, d.height);
     }
+
+    public void changeColor(Color color) { this.color = color; }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
@@ -49,6 +52,7 @@ public class SelfArrow extends JComponent {
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setStroke(new BasicStroke(3));
+        g2d.setColor(this.color);
         Arc2D arc = new Arc2D.Double();
         arc.setArcByCenter(x, y, r, ang1, ang2, Arc2D.OPEN);
         if (directed) {

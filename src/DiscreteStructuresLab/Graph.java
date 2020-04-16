@@ -2,27 +2,30 @@ package DiscreteStructuresLab;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 
 public class Graph {
     private int size = 70;
     private boolean directed;
     private HashMap<Integer, Circle> vertices = new HashMap<>();
-    private HashSet<JComponent> edges = new HashSet<>();
+    private HashMap<List<Integer>, JComponent> edges = new HashMap<>();
     private int[][] matrix;
     private Dimension d = new Dimension(1000, 1000);
 
     public Graph(int[][] matrix, boolean directed) {
         this.matrix = matrix;
         this.directed = directed;
+        this.getVertices();
+        this.getEdges();
     }
 
     public void draw(JFrame frame) {
         for (Circle vertex : vertices.values()) {
             frame.add(vertex);
         }
-        for (JComponent edge : edges) {
+        for (JComponent edge : edges.values()) {
             frame.add(edge);
         }
     }
@@ -31,10 +34,13 @@ public class Graph {
         for (int i = 0; i < n; i++) {
             if (directed) {
                 for (int j = 0; j < n; j++) {
+                    List<Integer> key = new ArrayList<>();
+                    key.add(i);
+                    key.add(j);
                     if (i == j && matrix[i][j] == 1) {
                         Circle vertex = vertices.get(i + 1);
                         SelfArrow arrow = new SelfArrow(vertex.x, vertex.y, size, directed, d);
-                        edges.add(arrow);
+                        edges.put(key, arrow);
                     }
                     if (i != j && matrix[i][j] == 1) {
                         Circle vertex1 = vertices.get(i + 1);
@@ -52,24 +58,27 @@ public class Graph {
                             x1 = (int) (vertex1.x + (Math.cos(angle2) * size / 2));
                             y1 = (int) (vertex1.y + (Math.sin(angle2) * size / 2));
                             CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, k, directed, d);
-                            edges.add(arrow);
+                            edges.put(key, arrow);
                         } else {
                             if (k > 0) {
                                 CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, k, directed, d);
-                                edges.add(arrow);
+                                edges.put(key, arrow);
                             } else {
                                 Arrow arrow = new Arrow(x1, y1, x2, y2, directed, d);
-                                edges.add(arrow);
+                                edges.put(key, arrow);
                             }
                         }
                     }
                 }
             } else {
                 for (int l = i; l < n; l++) {
+                    List<Integer> key = new ArrayList<>();
+                    key.add(i);
+                    key.add(l);
                     if (i == l && matrix[i][l] == 1) {
                         Circle vertex = vertices.get(i + 1);
                         SelfArrow arrow = new SelfArrow(vertex.x, vertex.y, size, directed, d);
-                        edges.add(arrow);
+                        edges.put(key, arrow);
                     }
                     if (i != l && matrix[i][l] == 1) {
                         Circle vertex1 = vertices.get(i + 1);
@@ -84,10 +93,10 @@ public class Graph {
                         int k = intersect(x1, y1, x2, y2);
                         if (k > 0) {
                             CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, k, directed, d);
-                            edges.add(arrow);
+                            edges.put(key, arrow);
                         } else {
                             Arrow arrow = new Arrow(x1, y1, x2, y2, directed, d);
-                            edges.add(arrow);
+                            edges.put(key, arrow);
                         }
                     }
                 }
@@ -150,6 +159,37 @@ public class Graph {
             int an = n - v - h;
             Circle vertexAdditional = new Circle(ax, ay, size, d, an);
             vertices.put(an, vertexAdditional);
+        }
+    }
+    public void changeVertexColor(int v, Color color) {
+        Circle vertex = vertices.get(v);
+        vertex.changeColor(color);
+    }
+    public void changeVertexNumber(int v, int n) {
+        Circle vertex = vertices.get(v);
+        vertex.changeNumber(n);
+    }
+    public void changeEdgeColor(int v1, int v2, Color color) {
+        List<Integer> key = new ArrayList<>();
+        if (!directed && v1 > v2) {
+            key.add(v2 - 1);
+            key.add(v1 - 1);
+        } else {
+            key.add(v1 - 1);
+            key.add(v2 - 1);
+        }
+        JComponent edge = edges.get(key);
+        if (edge.getClass().getName().equals("DiscreteStructuresLab.Arrow")) {
+            Arrow arrow = (Arrow) edge;
+            arrow.changeColor(color);
+        }
+        if (edge.getClass().getName().equals("DiscreteStructuresLab.SelfArrow")) {
+            SelfArrow arrow = (SelfArrow) edge;
+            arrow.changeColor(color);
+        }
+        if (edge.getClass().getName().equals("DiscreteStructuresLab.CurvedArrow")) {
+            CurvedArrow arrow = (CurvedArrow) edge;
+            arrow.changeColor(color);
         }
     }
 }

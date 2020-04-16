@@ -28,25 +28,24 @@ public class Window extends JFrame {
     private void createGraph() {
         int[][] matrix = Matrix.generateMatrix(this.n1, this.n2, this.n3, this.n4, !this.directed);
         this
-                .drawDegreesButton(matrix, this.directed)
+                .drawDegreesButton(matrix)
                 .drawPathsButton(matrix)
                 .drawReachabilityButton(matrix)
                 .drawConnectedButton(matrix)
                 .drawCondensedButton(matrix)
+                .drawDFSButton(matrix)
                 .drawMatrix(matrix)
-                .drawGraph(matrix, this.directed);
+                .drawGraph(matrix);
     }
-    public void drawGraph(int[][] matrix, boolean directed) {
+    public void drawGraph(int[][] matrix) {
         Graph graph = new Graph(matrix, directed);
-        graph.getVertices();
-        graph.getEdges();
         graph.draw(this);
     }
     public void changeOrientation() { this.directed = !this.directed; }
     public void redraw() {
-        Component[] components = this.getContentPane().getComponents();
-        for (Component component : components) component.setVisible(false);
         this.getContentPane().removeAll();
+        this.revalidate();
+        this.repaint();
         this.init();
     }
     public Window drawDirectedButton() {
@@ -67,7 +66,7 @@ public class Window extends JFrame {
         this.add(b);
         return this;
     }
-    public Window drawDegreesButton(int[][] matrix, boolean directed) {
+    public Window drawDegreesButton(int[][] matrix) {
         JLabel label = new JLabel("Степені вершин");
         label.setBounds(1100, 95, d.width, 30);
         label.setFont(this.FONT);
@@ -142,6 +141,21 @@ public class Window extends JFrame {
         this.add(b);
         return this;
     }
+    public Window drawDFSButton(int[][] matrix) {
+        JLabel label = new JLabel("Обхід в глибину");
+        label.setBounds(1100, 245, d.width, 30);
+        label.setFont(this.FONT);
+        this.add(label);
+        JButton b = new JButton("Обійти");
+        b.setBounds(1300, 245, 150, 30);
+        b.setFont(this.FONT);
+        b.setBackground(Color.WHITE);
+        b.setFocusPainted(false);
+        b.setActionCommand("Show DFS Window");
+        b.addActionListener(new ButtonListener(matrix, directed));
+        this.add(b);
+        return this;
+    }
     public Window drawMatrix(int[][] matrix) {
         for (int i = 0; i < matrix.length; i++) {
             String mat = "";
@@ -150,7 +164,7 @@ public class Window extends JFrame {
             }
             mat = mat.trim();
             JLabel matrixLabel = new JLabel(mat);
-            matrixLabel.setBounds(1100, 275 + 20 * i, d.width, 20);
+            matrixLabel.setBounds(1100, 305 + 20 * i, d.width, 20);
             matrixLabel.setFont(this.FONT);
             this.add(matrixLabel);
         }

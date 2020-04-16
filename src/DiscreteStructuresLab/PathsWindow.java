@@ -131,9 +131,9 @@ public class PathsWindow  extends JFrame {
         panel.setPreferredSize(new Dimension(1920, 170 + 20 * cMax));
     }
     public void redraw() {
-        Component[] components = panel.getComponents();
-        for (Component component : components) component.setVisible(false);
         panel.removeAll();
+        panel.revalidate();
+        panel.repaint();
         this.init();
     }
     public void changePathsLength() {

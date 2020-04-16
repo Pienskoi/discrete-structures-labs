@@ -112,8 +112,6 @@ public class CondensedWindow extends JFrame {
             this.add(compLabel);
         }
         Graph graph = new Graph(condensed, true);
-        graph.getVertices();
-        graph.getEdges();
         graph.draw(this);
     }
 }

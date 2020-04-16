@@ -88,16 +88,5 @@ public class DegreesWindow extends JFrame {
         regularLabel.setBounds(250, 50, d.width, 20);
         regularLabel.setFont(this.FONT);
         this.add(regularLabel);
-        for (int i = 0; i < matrix.length; i++) {
-            String mat = "";
-            for (int j = 0; j < matrix[i].length; j++) {
-                mat = mat.concat("  " + matrix[i][j]);
-            }
-            mat = mat.trim();
-            JLabel matrixLabel = new JLabel(mat);
-            matrixLabel.setBounds(1100, 275 + 20 * i, d.width, 20);
-            matrixLabel.setFont(this.FONT);
-            this.add(matrixLabel);
-        }
     }
 }
