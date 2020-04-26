@@ -62,6 +62,9 @@ public class ButtonListener implements ActionListener {
         if ("Show tree or graph".equals(e.getActionCommand())) {
             this.DFSWindow.changeGraphToTree();
             this.DFSWindow.finish();
+        }if ("Change numeration".equals(e.getActionCommand())) {
+            this.DFSWindow.changeNumeration();
+            this.DFSWindow.finish();
         }
     }
 }

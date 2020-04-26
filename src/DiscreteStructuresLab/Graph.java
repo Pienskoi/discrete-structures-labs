@@ -10,7 +10,8 @@ public class Graph {
     private int size = 70;
     private boolean directed;
     private HashMap<Integer, Circle> vertices = new HashMap<>();
-    private HashMap<List<Integer>, JComponent> edges = new HashMap<>();
+    private HashMap<List<Integer>, JComponent> edges = new HashMap<>(),
+            treeEdges = new HashMap<>();
     private int[][] matrix;
     private Dimension d = new Dimension(1000, 1000);
 
@@ -169,7 +170,7 @@ public class Graph {
         Circle vertex = vertices.get(v);
         vertex.changeNumber(n);
     }
-    public void changeEdgeColor(int v1, int v2, Color color) {
+    public void addEdgeToTree(int v1, int v2) {
         List<Integer> key = new ArrayList<>();
         if (!directed && v1 > v2) {
             key.add(v2 - 1);
@@ -179,17 +180,26 @@ public class Graph {
             key.add(v2 - 1);
         }
         JComponent edge = edges.get(key);
+        treeEdges.put(key, edge);
         if (edge.getClass().getName().equals("DiscreteStructuresLab.Arrow")) {
             Arrow arrow = (Arrow) edge;
-            arrow.changeColor(color);
+            arrow.changeColor(Color.BLUE);
         }
         if (edge.getClass().getName().equals("DiscreteStructuresLab.SelfArrow")) {
             SelfArrow arrow = (SelfArrow) edge;
-            arrow.changeColor(color);
+            arrow.changeColor(Color.BLUE);
         }
         if (edge.getClass().getName().equals("DiscreteStructuresLab.CurvedArrow")) {
             CurvedArrow arrow = (CurvedArrow) edge;
-            arrow.changeColor(color);
+            arrow.changeColor(Color.BLUE);
+        }
+    }
+    public void drawTree(JFrame frame) {
+        for (Circle vertex : vertices.values()) {
+            frame.add(vertex);
+        }
+        for (JComponent edge : treeEdges.values()) {
+            frame.add(edge);
         }
     }
 }

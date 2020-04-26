@@ -24,7 +24,7 @@ public class PathsWindow  extends JFrame {
         JScrollPane scrollBar = new JScrollPane(panel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollBar.getVerticalScrollBar().setUnitIncrement(20);
         this.add(scrollBar);
-        panel.setLayout(null);
+        this.panel.setLayout(null);
         this.setPreferredSize(d);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.pack();

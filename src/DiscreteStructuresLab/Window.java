@@ -49,7 +49,7 @@ public class Window extends JFrame {
         this.init();
     }
     public Window drawDirectedButton() {
-        String text = "";
+        String text;
         if (directed) text = "Граф напрямлений";
         else text = "Граф ненапрямлений";
         JLabel label = new JLabel(text);
