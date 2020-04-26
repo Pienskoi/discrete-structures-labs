@@ -4,10 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Window extends JFrame {
-    private int n1 = 9, n2 = 4, n3 = 2, n4 = 2;
+    private int n1 = 9, n2 = 4, n3 = 2, n4 = 2, lab = 4;
     private boolean directed = true;
     private Dimension d = new Dimension(1500, 1000);
     private final Font FONT = new Font("Arial", Font.BOLD, 16);
+    private JComboBox<Integer> labBox;
 
     Window(String title) {
         super(title);
@@ -21,12 +22,13 @@ public class Window extends JFrame {
 
     public void init() {
         this
+                .drawLabSelectButton()
                 .drawDirectedButton()
                 .createGraph();
     }
 
     private void createGraph() {
-        int[][] matrix = Matrix.generateMatrix(this.n1, this.n2, this.n3, this.n4, !this.directed);
+        int[][] matrix = Matrix.generateMatrix(this.n1, this.n2, this.n3, this.n4, this.lab, !this.directed);
         this
                 .drawDegreesButton(matrix)
                 .drawPathsButton(matrix)
@@ -44,20 +46,47 @@ public class Window extends JFrame {
     public void changeOrientation() { this.directed = !this.directed; }
     public void redraw() {
         this.getContentPane().removeAll();
+        this.init();
         this.revalidate();
         this.repaint();
-        this.init();
+    }
+    public Window drawLabSelectButton() {
+        JLabel label = new JLabel("Лабораторна робота №");
+        label.setBounds(1100, 65, d.width, 30);
+        label.setFont(this.FONT);
+        this.add(label);
+        Integer[] labs = new Integer[]{1, 2, 3, 4};
+        this.labBox = new JComboBox<>(labs);
+        labBox.setBounds(1300, 65, 40, 30);
+        labBox.setFont(this.FONT);
+        labBox.setBackground(Color.WHITE);
+        DefaultListCellRenderer listRenderer = new DefaultListCellRenderer();
+        listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
+        labBox.setRenderer(listRenderer);
+        labBox.setFocusable(false);
+        labBox.setMaximumRowCount(6);
+        labBox.setSelectedIndex(lab - 1);
+        this.add(labBox);
+        JButton b = new JButton("Вибрати");
+        b.setBounds(1340, 65, 110, 30);
+        b.setFont(this.FONT);
+        b.setBackground(Color.WHITE);
+        b.setFocusPainted(false);
+        b.setActionCommand("Select lab");
+        b.addActionListener(new ButtonListener(this));
+        this.add(b);
+        return this;
     }
     public Window drawDirectedButton() {
         String text;
         if (directed) text = "Граф напрямлений";
         else text = "Граф ненапрямлений";
         JLabel label = new JLabel(text);
-        label.setBounds(1100, 65, d.width, 30);
+        label.setBounds(1100, 95, d.width, 30);
         label.setFont(this.FONT);
         this.add(label);
         JButton b = new JButton("Змінити");
-        b.setBounds(1300, 65, 150, 30);
+        b.setBounds(1300, 95, 150, 30);
         b.setFont(this.FONT);
         b.setBackground(Color.WHITE);
         b.setFocusPainted(false);
@@ -68,11 +97,11 @@ public class Window extends JFrame {
     }
     public Window drawDegreesButton(int[][] matrix) {
         JLabel label = new JLabel("Степені вершин");
-        label.setBounds(1100, 95, d.width, 30);
+        label.setBounds(1100, 125, d.width, 30);
         label.setFont(this.FONT);
         this.add(label);
         JButton b = new JButton("Показати");
-        b.setBounds(1300, 95, 150, 30);
+        b.setBounds(1300, 125, 150, 30);
         b.setFont(this.FONT);
         b.setBackground(Color.WHITE);
         b.setFocusPainted(false);
@@ -83,11 +112,11 @@ public class Window extends JFrame {
     }
     public Window drawPathsButton(int[][] matrix) {
         JLabel label = new JLabel("Шляхи довжиною 2 і 3");
-        label.setBounds(1100, 125, d.width, 30);
+        label.setBounds(1100, 155, d.width, 30);
         label.setFont(this.FONT);
         this.add(label);
         JButton b = new JButton("Показати");
-        b.setBounds(1300, 125, 150, 30);
+        b.setBounds(1300, 155, 150, 30);
         b.setFont(this.FONT);
         b.setBackground(Color.WHITE);
         b.setFocusPainted(false);
@@ -98,11 +127,11 @@ public class Window extends JFrame {
     }
     public Window drawReachabilityButton(int[][] matrix) {
         JLabel label = new JLabel("Матриця досяжності");
-        label.setBounds(1100, 155, d.width, 30);
+        label.setBounds(1100, 185, d.width, 30);
         label.setFont(this.FONT);
         this.add(label);
         JButton b = new JButton("Показати");
-        b.setBounds(1300, 155, 150, 30);
+        b.setBounds(1300, 185, 150, 30);
         b.setFont(this.FONT);
         b.setBackground(Color.WHITE);
         b.setFocusPainted(false);
@@ -113,11 +142,11 @@ public class Window extends JFrame {
     }
     public Window drawConnectedButton(int[][] matrix) {
         JLabel label = new JLabel("Матриця зв'язності");
-        label.setBounds(1100, 185, d.width, 30);
+        label.setBounds(1100, 215, d.width, 30);
         label.setFont(this.FONT);
         this.add(label);
         JButton b = new JButton("Показати");
-        b.setBounds(1300, 185, 150, 30);
+        b.setBounds(1300, 215, 150, 30);
         b.setFont(this.FONT);
         b.setBackground(Color.WHITE);
         b.setFocusPainted(false);
@@ -128,11 +157,11 @@ public class Window extends JFrame {
     }
     public Window drawCondensedButton(int[][] matrix) {
         JLabel label = new JLabel("Граф конденсації");
-        label.setBounds(1100, 215, d.width, 30);
+        label.setBounds(1100, 245, d.width, 30);
         label.setFont(this.FONT);
         this.add(label);
         JButton b = new JButton("Показати");
-        b.setBounds(1300, 215, 150, 30);
+        b.setBounds(1300, 245, 150, 30);
         b.setFont(this.FONT);
         b.setBackground(Color.WHITE);
         b.setFocusPainted(false);
@@ -143,11 +172,11 @@ public class Window extends JFrame {
     }
     public Window drawDFSButton(int[][] matrix) {
         JLabel label = new JLabel("Обхід в глибину");
-        label.setBounds(1100, 245, d.width, 30);
+        label.setBounds(1100, 275, d.width, 30);
         label.setFont(this.FONT);
         this.add(label);
         JButton b = new JButton("Обійти");
-        b.setBounds(1300, 245, 150, 30);
+        b.setBounds(1300, 275, 150, 30);
         b.setFont(this.FONT);
         b.setBackground(Color.WHITE);
         b.setFocusPainted(false);
@@ -164,10 +193,12 @@ public class Window extends JFrame {
             }
             mat = mat.trim();
             JLabel matrixLabel = new JLabel(mat);
-            matrixLabel.setBounds(1100, 305 + 20 * i, d.width, 20);
+            matrixLabel.setBounds(1100, 335 + 20 * i, d.width, 20);
             matrixLabel.setFont(this.FONT);
             this.add(matrixLabel);
         }
         return this;
     }
+    public void changeLab(int lab) { this.lab = lab; }
+    public JComboBox<Integer> getComboBox() { return this.labBox; }
 }

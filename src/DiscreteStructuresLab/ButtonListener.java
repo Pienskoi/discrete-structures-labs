@@ -66,5 +66,11 @@ public class ButtonListener implements ActionListener {
             this.DFSWindow.changeNumeration();
             this.DFSWindow.finish();
         }
+        if ("Select lab".equals(e.getActionCommand())) {
+            JComboBox<Integer> labBox = this.window.getComboBox();
+            int lab = labBox.getSelectedIndex();
+            this.window.changeLab(lab + 1);
+            this.window.redraw();
+        }
     }
 }

@@ -50,7 +50,7 @@ public class DepthFirstSearchWindow extends JFrame {
         vBox.setFont(this.FONT);
         vBox.setBackground(Color.WHITE);
         DefaultListCellRenderer listRenderer = new DefaultListCellRenderer();
-        listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER); // center-aligned items
+        listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
         vBox.setRenderer(listRenderer);
         vBox.setFocusable(false);
         vBox.setMaximumRowCount(12);

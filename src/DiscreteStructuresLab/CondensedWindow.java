@@ -104,8 +104,15 @@ public class CondensedWindow extends JFrame {
                     text += (j + 1) + " ";
                 }
             }
+            int m = i + 1;
+            String index = "";
+            while (m > 0) {
+                int a = m % 10;
+                String num = String.valueOf(Character.toChars(Integer.parseInt("208" + a, 16)));
+                index = num + index;
+                m = m / 10;
+            }
             text = text.trim().replace(" ", ", ");
-            String index = String.valueOf(Character.toChars(Integer.parseInt("208" + (i + 1), 16)));
             JLabel compLabel = new JLabel("K" + index + " = { " + text + " }");
             compLabel.setBounds(1200 + condensed.length * 10, 65 + 20 * i, d.width, 20);
             compLabel.setFont(this.FONT);

@@ -72,8 +72,15 @@ public class ConnectedWindow extends JFrame {
                 }
             }
             if (text.length() > 0) {
+                int m = c + 1;
+                String index = "";
+                while (m > 0) {
+                    int a = m % 10;
+                    String num = String.valueOf(Character.toChars(Integer.parseInt("208" + a, 16)));
+                    index = num + index;
+                    m = m / 10;
+                }
                 text = text.trim().replace(" ", ", ");
-                String index = String.valueOf(Character.toChars(Integer.parseInt("208" + (c + 1), 16)));
                 JLabel compLabel = new JLabel("K" + index + " = { " + text + " }");
                 compLabel.setBounds(60 + 16 * n, 30 + 20 * c, d.width, 20);
                 compLabel.setFont(this.FONT);
