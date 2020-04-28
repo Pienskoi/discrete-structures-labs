@@ -2,11 +2,15 @@ package DiscreteStructuresLab;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 
 public class SelfArrow extends JComponent {
-    private int x, y, ang1, ang2, ang3, r = 30;
+    private int x, y, ang1, ang2, ang3,
+            r = 30,
+            weight = 0;
     private boolean directed;
     private Color color = Color.BLACK;
 
@@ -45,6 +49,7 @@ public class SelfArrow extends JComponent {
     }
 
     public void changeColor(Color color) { this.color = color; }
+    public void addWeight(int weight) { this.weight = weight; }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
@@ -73,6 +78,22 @@ public class SelfArrow extends JComponent {
         }
         else {
             g2d.draw(arc);
+        }
+        if (weight != 0) {
+            FontMetrics fm = g2d.getFontMetrics();
+            int xc = (int) (x + Math.cos(ang3) * r);
+            int yc = (int) (y + Math.sin(ang3) * r);
+            int x = xc - fm.stringWidth(String.valueOf(weight)) / 2;
+            int y = yc + fm.getAscent() - fm.getHeight() / 2;
+            g2d.translate(x, y);
+            g2d.setColor(Color.WHITE);
+            FontRenderContext frc = g2d.getFontRenderContext();
+            TextLayout tl = new TextLayout(String.valueOf(weight), new Font("Arial", Font.BOLD, 18), frc);
+            Shape shape = tl.getOutline(null);
+            g2d.setStroke(new BasicStroke(4));
+            g2d.draw(shape);
+            g2d.setColor(color);
+            g2d.fill(shape);
         }
     }
 }

@@ -2,11 +2,13 @@ package DiscreteStructuresLab;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 
 public class Arrow extends JComponent {
-    private int x1, y1, x2, y2;
+    private int x1, y1, x2, y2, weight = 0;
     private boolean directed;
     private Color color = Color.BLACK;
 
@@ -21,6 +23,7 @@ public class Arrow extends JComponent {
     }
 
     public void changeColor(Color color) { this.color = color; }
+    public void addWeight(int weight) { this.weight = weight; }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
@@ -47,6 +50,22 @@ public class Arrow extends JComponent {
         else {
             Shape line = new Line2D.Double(x1, y1, x2, y2);
             g2d.draw(line);
+        }
+        if (weight != 0) {
+            FontMetrics fm = g2d.getFontMetrics();
+            int xc = (4 * x1 + 5 * x2) / 9;
+            int yc = (4 * y1 + 5 * y2) / 9;
+            int x = xc - fm.stringWidth(String.valueOf(weight)) / 2;
+            int y = yc + fm.getAscent() - fm.getHeight() / 2;
+            g2d.translate(x, y);
+            g2d.setColor(Color.WHITE);
+            FontRenderContext frc = g2d.getFontRenderContext();
+            TextLayout tl = new TextLayout(String.valueOf(weight), new Font("Arial", Font.BOLD, 18), frc);
+            Shape shape = tl.getOutline(null);
+            g2d.setStroke(new BasicStroke(4));
+            g2d.draw(shape);
+            g2d.setColor(color);
+            g2d.fill(shape);
         }
     }
 }

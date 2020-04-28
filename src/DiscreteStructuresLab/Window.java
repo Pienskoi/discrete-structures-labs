@@ -4,8 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Window extends JFrame {
-    private int n1 = 9, n2 = 4, n3 = 2, n4 = 2, lab = 4;
-    private boolean directed = true;
+    private int n1 = 9, n2 = 4, n3 = 2, n4 = 2, lab = 5;
+    private boolean directed = false;
     private Dimension d = new Dimension(1500, 1000);
     private final Font FONT = new Font("Arial", Font.BOLD, 16);
     private JComboBox<Integer> labBox;
@@ -29,6 +29,7 @@ public class Window extends JFrame {
 
     private void createGraph() {
         int[][] matrix = Matrix.generateMatrix(this.n1, this.n2, this.n3, this.n4, this.lab, !this.directed);
+        int[][] weightMatrix = Matrix.generateWeightMatrix(this.n1, this.n2, this.n3, this.n4, this.lab);
         this
                 .drawDegreesButton(matrix)
                 .drawPathsButton(matrix)
@@ -36,6 +37,7 @@ public class Window extends JFrame {
                 .drawConnectedButton(matrix)
                 .drawCondensedButton(matrix)
                 .drawDFSButton(matrix)
+                .drawMSTButton(matrix, weightMatrix)
                 .drawMatrix(matrix)
                 .drawGraph(matrix);
     }
@@ -55,7 +57,7 @@ public class Window extends JFrame {
         label.setBounds(1100, 65, d.width, 30);
         label.setFont(this.FONT);
         this.add(label);
-        Integer[] labs = new Integer[]{1, 2, 3, 4};
+        Integer[] labs = new Integer[]{1, 2, 3, 4, 5};
         this.labBox = new JComboBox<>(labs);
         labBox.setBounds(1300, 65, 40, 30);
         labBox.setFont(this.FONT);
@@ -64,7 +66,7 @@ public class Window extends JFrame {
         listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
         labBox.setRenderer(listRenderer);
         labBox.setFocusable(false);
-        labBox.setMaximumRowCount(6);
+        labBox.setMaximumRowCount(5);
         labBox.setSelectedIndex(lab - 1);
         this.add(labBox);
         JButton b = new JButton("Вибрати");
@@ -185,6 +187,22 @@ public class Window extends JFrame {
         this.add(b);
         return this;
     }
+    public Window drawMSTButton(int[][] matrix, int[][] weightMatrix) {
+        JLabel label = new JLabel("Мінімальний кістяк");
+        label.setBounds(1100, 305, d.width, 30);
+        label.setFont(this.FONT);
+        this.add(label);
+        JButton b = new JButton("Знайти");
+        b.setBounds(1300, 305, 150, 30);
+        b.setFont(this.FONT);
+        b.setBackground(Color.WHITE);
+        b.setFocusPainted(false);
+        b.setActionCommand("Show MST Window");
+        b.addActionListener(new ButtonListener(matrix, weightMatrix, directed));
+        if (directed || lab == 2) b.setEnabled(false);
+        this.add(b);
+        return this;
+    }
     public Window drawMatrix(int[][] matrix) {
         for (int i = 0; i < matrix.length; i++) {
             String mat = "";
@@ -193,7 +211,7 @@ public class Window extends JFrame {
             }
             mat = mat.trim();
             JLabel matrixLabel = new JLabel(mat);
-            matrixLabel.setBounds(1100, 335 + 20 * i, d.width, 20);
+            matrixLabel.setBounds(1100, 365 + 20 * i, d.width, 20);
             matrixLabel.setFont(this.FONT);
             this.add(matrixLabel);
         }

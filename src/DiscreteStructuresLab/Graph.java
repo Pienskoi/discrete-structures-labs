@@ -202,4 +202,52 @@ public class Graph {
             frame.add(edge);
         }
     }
+    public void addWeightToEdges(int[][] weightMatrix) {
+        int n = weightMatrix.length;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                if (weightMatrix[i][j] != 0) {
+                    List<Integer> key = new ArrayList<>();
+                    key.add(i);
+                    key.add(j);
+                    JComponent edge = edges.get(key);
+                    if (edge.getClass().getName().equals("DiscreteStructuresLab.Arrow")) {
+                        Arrow arrow = (Arrow) edge;
+                        arrow.addWeight(weightMatrix[i][j]);
+                    }
+                    if (edge.getClass().getName().equals("DiscreteStructuresLab.SelfArrow")) {
+                        SelfArrow arrow = (SelfArrow) edge;
+                        arrow.addWeight(weightMatrix[i][j]);
+                    }
+                    if (edge.getClass().getName().equals("DiscreteStructuresLab.CurvedArrow")) {
+                        CurvedArrow arrow = (CurvedArrow) edge;
+                        arrow.addWeight(weightMatrix[i][j]);
+                    }
+                }
+            }
+        }
+    }
+    public void changeEdgeColor(int v1, int v2, Color color) {
+        List<Integer> key = new ArrayList<>();
+        if (!directed && v1 > v2) {
+            key.add(v2 - 1);
+            key.add(v1 - 1);
+        } else {
+            key.add(v1 - 1);
+            key.add(v2 - 1);
+        }
+        JComponent edge = edges.get(key);
+        if (edge.getClass().getName().equals("DiscreteStructuresLab.Arrow")) {
+            Arrow arrow = (Arrow) edge;
+            arrow.changeColor(color);
+        }
+        if (edge.getClass().getName().equals("DiscreteStructuresLab.SelfArrow")) {
+            SelfArrow arrow = (SelfArrow) edge;
+            arrow.changeColor(color);
+        }
+        if (edge.getClass().getName().equals("DiscreteStructuresLab.CurvedArrow")) {
+            CurvedArrow arrow = (CurvedArrow) edge;
+            arrow.changeColor(color);
+        }
+    }
 }

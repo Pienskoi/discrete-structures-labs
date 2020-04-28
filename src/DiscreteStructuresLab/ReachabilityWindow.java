@@ -28,7 +28,7 @@ public class ReachabilityWindow extends JFrame {
             reach[i][i] = 1;
         }
         for (int k = 0; k < n; k++) {
-            for (int i =0; i < n; i++) {
+            for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
                     if (reach[i][j] == 1 || (reach[i][k] == 1 && reach[k][j] == 1))
                         reach[i][j] = 1;

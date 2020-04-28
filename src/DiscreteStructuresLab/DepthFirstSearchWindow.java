@@ -8,7 +8,7 @@ public class DepthFirstSearchWindow extends JFrame {
     private int[][] matrix, newMatrix, treeMatrix;
     private final Font FONT = new Font("FreeSans", Font.BOLD, 16);
     private Dimension d;
-    private boolean directed, tree = false, newNum = true;
+    private boolean tree = false, newNum = true;
     private int[] newArr;
     private Stack<Integer> stack;
     private int vertex, first, counter;
@@ -21,7 +21,6 @@ public class DepthFirstSearchWindow extends JFrame {
         this.treeMatrix = new int[matrix.length][matrix.length];
         this.newMatrix = new int[matrix.length][matrix.length];
         this.d = new Dimension(1550, 1000);
-        this.directed = directed;
         this.newArr = new int[matrix.length];
         this.stack = new Stack<>();
         this.newGraph = new Graph(matrix, directed);
@@ -140,7 +139,7 @@ public class DepthFirstSearchWindow extends JFrame {
         b1.setFont(this.FONT);
         b1.setBackground(Color.WHITE);
         b1.setFocusPainted(false);
-        b1.setActionCommand("Show tree or graph");
+        b1.setActionCommand("Show DFS tree or graph");
         b1.addActionListener(new ButtonListener(this));
         this.add(b1);
         b2.setBounds(1100, 95, 390, 30);
@@ -194,6 +193,6 @@ public class DepthFirstSearchWindow extends JFrame {
             this.add(matrixLabel);
         }
     }
-    public void changeGraphToTree() {this.tree = !this.tree; }
-    public void changeNumeration() {this.newNum = !this.newNum; }
+    public void changeGraphToTree() { this.tree = !this.tree; }
+    public void changeNumeration() { this.newNum = !this.newNum; }
 }
