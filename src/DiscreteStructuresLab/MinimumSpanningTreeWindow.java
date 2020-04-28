@@ -112,7 +112,7 @@ public class MinimumSpanningTreeWindow extends JFrame {
     public void trail(int v, ArrayList<Integer> vertices) {
         int n = treeMatrix.length;
         for (int i = 0; i < n; i++) {
-            if (treeMatrix[v][i] > 1 && !vertices.contains(i)) {
+            if (treeMatrix[v][i] >= 1 && !vertices.contains(i)) {
                 vertices.add(i);
                 this.trail(i, vertices);
             }
