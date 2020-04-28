@@ -66,7 +66,7 @@ public class MinimumSpanningTreeWindow extends JFrame {
         LOOP:
         for (int i = 0; i < n; i++) {
             for (int j = i; j < n; j++) {
-                if (weightMatrix[i][j] == min && treeMatrix[i][j] != 1 && bannedMatrix[i][j] != 1) {
+                if (weightMatrix[i][j] == min && treeMatrix[i][j] == 0 && bannedMatrix[i][j] == 0) {
                     if (this.checkCycle(i, j)) {
                         graph.changeEdgeColor(i + 1, j + 1, Color.RED);
                         bannedMatrix[i][j] = 1;
@@ -75,8 +75,8 @@ public class MinimumSpanningTreeWindow extends JFrame {
                         graph.addEdgeToTree(i + 1, j + 1);
                         graph.changeVertexColor(i + 1, Color.BLUE);
                         graph.changeVertexColor(j + 1, Color.BLUE);
-                        treeMatrix[i][j] = 1;
-                        treeMatrix[j][i] = 1;
+                        treeMatrix[i][j] = min;
+                        treeMatrix[j][i] = min;
                         counter++;
                     }
                     break LOOP;
@@ -112,7 +112,7 @@ public class MinimumSpanningTreeWindow extends JFrame {
     public void trail(int v, ArrayList<Integer> vertices) {
         int n = treeMatrix.length;
         for (int i = 0; i < n; i++) {
-            if (treeMatrix[v][i] == 1 && !vertices.contains(i)) {
+            if (treeMatrix[v][i] > 1 && !vertices.contains(i)) {
                 vertices.add(i);
                 this.trail(i, vertices);
             }
@@ -139,17 +139,14 @@ public class MinimumSpanningTreeWindow extends JFrame {
         this.add(b);
     }
     public void drawTreeMatrix() {
-        int n = treeMatrix.length;
-        for (int i = 0; i < n; i++) {
-            String mat = "";
-            for (int j = 0; j < n; j++) {
-                mat = mat.concat("  " + treeMatrix[i][j]);
+        for (int i = 0; i < treeMatrix.length; i++) {
+            for (int j = 0; j < treeMatrix.length; j++) {
+                String element = treeMatrix[i][j] + "";
+                JLabel matrixLabel = new JLabel(element);
+                matrixLabel.setBounds(1100 + 35 * j, 155 + 25 * weightMatrix.length + 25 * i, d.width, 20);
+                matrixLabel.setFont(this.FONT);
+                this.add(matrixLabel);
             }
-            mat = mat.trim();
-            JLabel matrixLabel = new JLabel(mat);
-            matrixLabel.setBounds(1100, 155 + 25 * n + 20 * i, d.width, 20);
-            matrixLabel.setFont(this.FONT);
-            this.add(matrixLabel);
         }
     }
     public void drawNextButton() {
