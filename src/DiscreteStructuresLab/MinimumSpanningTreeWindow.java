@@ -83,7 +83,7 @@ public class MinimumSpanningTreeWindow extends JFrame {
                 }
             }
         }
-        if (counter == n - 1) {
+        if (counter == n - 1 || weights.isEmpty()) {
             this.finish();
         } else {
             this.clear();

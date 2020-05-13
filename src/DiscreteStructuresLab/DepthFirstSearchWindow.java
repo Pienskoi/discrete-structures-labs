@@ -42,7 +42,9 @@ public class DepthFirstSearchWindow extends JFrame {
         this.add(label);
         Integer[] vertices = new Integer[n];
         for (int i = 0; i < n; i++) {
-            vertices[i] = i + 1;
+            if (graph.getDegree(i) != 0 || (graph.getInDegree(i) + graph.getOutDegree(i)) != 0) {
+                vertices[i] = i + 1;
+            }
         }
         this.vBox = new JComboBox<>(vertices);
         vBox.setBounds(1265, 65, 50, 30);

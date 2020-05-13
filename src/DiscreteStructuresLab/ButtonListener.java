@@ -11,6 +11,7 @@ public class ButtonListener implements ActionListener {
     private PathsWindow pathsWindow;
     private DepthFirstSearchWindow DFSWindow;
     private MinimumSpanningTreeWindow MSTWindow;
+    private DijkstraWindow DijkstraWindow;
 
     public ButtonListener(int[][] matrix, boolean directed) {
         this.directed = directed;
@@ -25,6 +26,7 @@ public class ButtonListener implements ActionListener {
     public ButtonListener(PathsWindow window) { this.pathsWindow = window; }
     public ButtonListener(DepthFirstSearchWindow window) { this.DFSWindow = window; }
     public ButtonListener(MinimumSpanningTreeWindow window) { this.MSTWindow = window; }
+    public ButtonListener(DijkstraWindow window) { this.DijkstraWindow = window; }
     public void actionPerformed(ActionEvent e) {
         if ("Change Orientation".equals(e.getActionCommand())) {
             this.window.changeOrientation();
@@ -90,6 +92,23 @@ public class ButtonListener implements ActionListener {
         if ("Show MST tree or graph".equals(e.getActionCommand())) {
             this.MSTWindow.changeGraphToTree();
             this.MSTWindow.finish();
+        }
+        if ("Show Dijkstra Window".equals(e.getActionCommand())) {
+            DijkstraWindow window = new DijkstraWindow(this.matrix, this.weightMatrix, this.directed);
+            window.setVisible(true);
+        }
+        if ("Start Dijkstra".equals(e.getActionCommand())) {
+            JComboBox<Integer> vBox = this.DijkstraWindow.getComboBox();
+            int vertex = vBox.getSelectedIndex();
+            this.DijkstraWindow.start(vertex);
+        }
+        if ("Next Dijkstra step".equals(e.getActionCommand())) {
+            this.DijkstraWindow.search();
+        }
+        if ("Show path".equals(e.getActionCommand())) {
+            JComboBox<Integer> vBox = this.DijkstraWindow.getComboBox();
+            int vertex = vBox.getItemAt(vBox.getSelectedIndex()) - 1;
+            this.DijkstraWindow.drawPath(vertex);
         }
     }
 }

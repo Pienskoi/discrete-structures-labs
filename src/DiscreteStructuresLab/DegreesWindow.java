@@ -26,19 +26,12 @@ public class DegreesWindow extends JFrame {
     }
 
     public void init() {
+        Graph graph = new Graph(matrix, directed);
         int n = matrix.length;
         String pendant = "Висячих вершин нема";
         String isolated = "Ізольованих вершин нема";
         for (int i = 0; i < n; i++) {
-            int outDegree = 0;
-            int inDegree = 0;
-            int degree = 0;
             int sumDeg;
-            for (int j = 0; j < n; j++) {
-                if (matrix[i][j] == 1) outDegree++;
-                if (matrix[j][i] == 1) inDegree++;
-                if (!directed && i == j) degree++;
-            }
             int m = i + 1;
             String index = "";
             while (m > 0) {
@@ -49,6 +42,8 @@ public class DegreesWindow extends JFrame {
             }
             String deg = "";
             if (directed) {
+                int outDegree = graph.getOutDegree(i);
+                int inDegree = graph.getInDegree(i);
                 inDegrees.add(inDegree);
                 outDegrees.add(outDegree);
                 sumDeg = outDegree + inDegree;
@@ -56,7 +51,7 @@ public class DegreesWindow extends JFrame {
                 String degMinus = "δ" + "\u207B" + "(v" + index + ") = " + inDegree;
                 deg = degPlus + "   " + degMinus;
             } else {
-                degree += outDegree;
+                int degree = graph.getDegree(i);
                 inDegrees.add(degree);
                 sumDeg = degree;
                 deg = "δ(v" + index + ") = " + degree;

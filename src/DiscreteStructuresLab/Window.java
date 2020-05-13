@@ -38,6 +38,7 @@ public class Window extends JFrame {
                 .drawCondensedButton(matrix)
                 .drawDFSButton(matrix)
                 .drawMSTButton(matrix, weightMatrix)
+                .drawDijkstraButton(matrix, weightMatrix)
                 .drawMatrix(matrix)
                 .drawGraph(matrix);
     }
@@ -53,7 +54,7 @@ public class Window extends JFrame {
         this.repaint();
     }
     public Window drawLabSelectButton() {
-        JLabel label = new JLabel("Лабораторна робота №");
+        JLabel label = new JLabel("Граф лаб. роботи №");
         label.setBounds(1100, 65, d.width, 30);
         label.setFont(this.FONT);
         this.add(label);
@@ -199,7 +200,23 @@ public class Window extends JFrame {
         b.setFocusPainted(false);
         b.setActionCommand("Show MST Window");
         b.addActionListener(new ButtonListener(matrix, weightMatrix, directed));
-        if (directed || lab == 2) b.setEnabled(false);
+        if (directed) b.setEnabled(false);
+        this.add(b);
+        return this;
+    }
+    public Window drawDijkstraButton(int[][] matrix, int[][] weightMatrix) {
+        JLabel label = new JLabel("Найкоротший шлях");
+        label.setBounds(1100, 335, d.width, 30);
+        label.setFont(this.FONT);
+        this.add(label);
+        JButton b = new JButton("Знайти");
+        b.setBounds(1300, 335, 150, 30);
+        b.setFont(this.FONT);
+        b.setBackground(Color.WHITE);
+        b.setFocusPainted(false);
+        b.setActionCommand("Show Dijkstra Window");
+        b.addActionListener(new ButtonListener(matrix, weightMatrix, directed));
+        if (directed) b.setEnabled(false);
         this.add(b);
         return this;
     }
@@ -211,7 +228,7 @@ public class Window extends JFrame {
             }
             mat = mat.trim();
             JLabel matrixLabel = new JLabel(mat);
-            matrixLabel.setBounds(1100, 365 + 20 * i, d.width, 20);
+            matrixLabel.setBounds(1100, 395 + 20 * i, d.width, 20);
             matrixLabel.setFont(this.FONT);
             this.add(matrixLabel);
         }

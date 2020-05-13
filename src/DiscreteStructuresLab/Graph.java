@@ -3,6 +3,7 @@ package DiscreteStructuresLab;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,10 +15,14 @@ public class Graph {
             treeEdges = new HashMap<>();
     private int[][] matrix;
     private Dimension d = new Dimension(1000, 1000);
+    private int[] inDegrees, outDegrees, degrees;
 
     public Graph(int[][] matrix, boolean directed) {
         this.matrix = matrix;
         this.directed = directed;
+        this.inDegrees = new int[matrix.length];
+        this.outDegrees = new int[matrix.length];
+        this.degrees = new int[matrix.length];
         this.getVertices();
         this.getEdges();
     }
@@ -38,35 +43,39 @@ public class Graph {
                     List<Integer> key = new ArrayList<>();
                     key.add(i);
                     key.add(j);
-                    if (i == j && matrix[i][j] == 1) {
-                        Circle vertex = vertices.get(i + 1);
-                        SelfArrow arrow = new SelfArrow(vertex.x, vertex.y, size, directed, d);
-                        edges.put(key, arrow);
-                    }
-                    if (i != j && matrix[i][j] == 1) {
-                        Circle vertex1 = vertices.get(i + 1);
-                        Circle vertex2 = vertices.get(j + 1);
-                        int dx = vertex2.x - vertex1.x;
-                        int dy = vertex2.y - vertex1.y;
-                        double angle = Math.atan2(dy, dx);
-                        int x1 = (int) (vertex1.x + (Math.cos(angle) * size / 2));
-                        int y1 = (int) (vertex1.y + (Math.sin(angle) * size / 2));
-                        int x2 = (int) (vertex2.x - (Math.cos(angle) * size / 2));
-                        int y2 = (int) (vertex2.y - (Math.sin(angle) * size / 2));
-                        int k = intersect(x1, y1, x2, y2);
-                        if (matrix[i][j] == matrix[j][i]) {
-                            double angle2 = angle + Math.PI / 10;
-                            x1 = (int) (vertex1.x + (Math.cos(angle2) * size / 2));
-                            y1 = (int) (vertex1.y + (Math.sin(angle2) * size / 2));
-                            CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, k, directed, d);
+                    if (matrix[i][j] == 1) {
+                        outDegrees[i]++;
+                        inDegrees[j]++;
+                        if (i == j) {
+                            Circle vertex = vertices.get(i + 1);
+                            SelfArrow arrow = new SelfArrow(vertex.x, vertex.y, size, directed, d);
                             edges.put(key, arrow);
-                        } else {
-                            if (k > 0) {
+                        }
+                        else {
+                            Circle vertex1 = vertices.get(i + 1);
+                            Circle vertex2 = vertices.get(j + 1);
+                            int dx = vertex2.x - vertex1.x;
+                            int dy = vertex2.y - vertex1.y;
+                            double angle = Math.atan2(dy, dx);
+                            int x1 = (int) (vertex1.x + (Math.cos(angle) * size / 2));
+                            int y1 = (int) (vertex1.y + (Math.sin(angle) * size / 2));
+                            int x2 = (int) (vertex2.x - (Math.cos(angle) * size / 2));
+                            int y2 = (int) (vertex2.y - (Math.sin(angle) * size / 2));
+                            int k = intersect(x1, y1, x2, y2);
+                            if (matrix[i][j] == matrix[j][i]) {
+                                double angle2 = angle + Math.PI / 10;
+                                x1 = (int) (vertex1.x + (Math.cos(angle2) * size / 2));
+                                y1 = (int) (vertex1.y + (Math.sin(angle2) * size / 2));
                                 CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, k, directed, d);
                                 edges.put(key, arrow);
                             } else {
-                                Arrow arrow = new Arrow(x1, y1, x2, y2, directed, d);
-                                edges.put(key, arrow);
+                                if (k > 0) {
+                                    CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, k, directed, d);
+                                    edges.put(key, arrow);
+                                } else {
+                                    Arrow arrow = new Arrow(x1, y1, x2, y2, directed, d);
+                                    edges.put(key, arrow);
+                                }
                             }
                         }
                     }
@@ -76,28 +85,32 @@ public class Graph {
                     List<Integer> key = new ArrayList<>();
                     key.add(i);
                     key.add(l);
-                    if (i == l && matrix[i][l] == 1) {
-                        Circle vertex = vertices.get(i + 1);
-                        SelfArrow arrow = new SelfArrow(vertex.x, vertex.y, size, directed, d);
-                        edges.put(key, arrow);
-                    }
-                    if (i != l && matrix[i][l] == 1) {
-                        Circle vertex1 = vertices.get(i + 1);
-                        Circle vertex2 = vertices.get(l + 1);
-                        int dx = vertex2.x - vertex1.x;
-                        int dy = vertex2.y - vertex1.y;
-                        double angle = Math.atan2(dy, dx);
-                        int x1 = (int) (vertex1.x + (Math.cos(angle) * size / 2));
-                        int y1 = (int) (vertex1.y + (Math.sin(angle) * size / 2));
-                        int x2 = (int) (vertex2.x - (Math.cos(angle) * size / 2));
-                        int y2 = (int) (vertex2.y - (Math.sin(angle) * size / 2));
-                        int k = intersect(x1, y1, x2, y2);
-                        if (k > 0) {
-                            CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, k, directed, d);
+                    if (matrix[i][l] == 1) {
+                        degrees[i]++;
+                        degrees[l]++;
+                        if (i == l) {
+                            Circle vertex = vertices.get(i + 1);
+                            SelfArrow arrow = new SelfArrow(vertex.x, vertex.y, size, directed, d);
                             edges.put(key, arrow);
-                        } else {
-                            Arrow arrow = new Arrow(x1, y1, x2, y2, directed, d);
-                            edges.put(key, arrow);
+                        }
+                        else {
+                            Circle vertex1 = vertices.get(i + 1);
+                            Circle vertex2 = vertices.get(l + 1);
+                            int dx = vertex2.x - vertex1.x;
+                            int dy = vertex2.y - vertex1.y;
+                            double angle = Math.atan2(dy, dx);
+                            int x1 = (int) (vertex1.x + (Math.cos(angle) * size / 2));
+                            int y1 = (int) (vertex1.y + (Math.sin(angle) * size / 2));
+                            int x2 = (int) (vertex2.x - (Math.cos(angle) * size / 2));
+                            int y2 = (int) (vertex2.y - (Math.sin(angle) * size / 2));
+                            int k = intersect(x1, y1, x2, y2);
+                            if (k > 0) {
+                                CurvedArrow arrow = new CurvedArrow(x1, y1, x2, y2, k, directed, d);
+                                edges.put(key, arrow);
+                            } else {
+                                Arrow arrow = new Arrow(x1, y1, x2, y2, directed, d);
+                                edges.put(key, arrow);
+                            }
                         }
                     }
                 }
@@ -172,12 +185,10 @@ public class Graph {
     }
     public void addEdgeToTree(int v1, int v2) {
         List<Integer> key = new ArrayList<>();
-        if (!directed && v1 > v2) {
-            key.add(v2 - 1);
-            key.add(v1 - 1);
-        } else {
-            key.add(v1 - 1);
-            key.add(v2 - 1);
+        key.add(v1 - 1);
+        key.add(v2 - 1);
+        if (!directed) {
+            Collections.sort(key);
         }
         JComponent edge = edges.get(key);
         treeEdges.put(key, edge);
@@ -229,12 +240,10 @@ public class Graph {
     }
     public void changeEdgeColor(int v1, int v2, Color color) {
         List<Integer> key = new ArrayList<>();
-        if (!directed && v1 > v2) {
-            key.add(v2 - 1);
-            key.add(v1 - 1);
-        } else {
-            key.add(v1 - 1);
-            key.add(v2 - 1);
+        key.add(v1 - 1);
+        key.add(v2 - 1);
+        if (!directed) {
+            Collections.sort(key);
         }
         JComponent edge = edges.get(key);
         if (edge.getClass().getName().equals("DiscreteStructuresLab.Arrow")) {
@@ -248,6 +257,27 @@ public class Graph {
         if (edge.getClass().getName().equals("DiscreteStructuresLab.CurvedArrow")) {
             CurvedArrow arrow = (CurvedArrow) edge;
             arrow.changeColor(color);
+        }
+    }
+    public int getInDegree(int v) { return inDegrees[v]; }
+    public int getOutDegree(int v) { return outDegrees[v]; }
+    public int getDegree(int v) { return degrees[v]; }
+    public void drawShortestPath(int[] verticesArr, JFrame frame) {
+        for (int i = 0; i < verticesArr.length; i++) {
+            if (verticesArr[i] > 0) {
+                Circle vertex = vertices.get(i + 1);
+                frame.add(vertex);
+                for (int j = 0; j < verticesArr.length; j++) {
+                    if (verticesArr[j] == verticesArr[i] + 1) {
+                        List<Integer> key = new ArrayList<>();
+                        key.add(i);
+                        key.add(j);
+                        Collections.sort(key);
+                        JComponent edge = edges.get(key);
+                        frame.add(edge);
+                    }
+                }
+            }
         }
     }
 }
